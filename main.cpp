@@ -1,30 +1,32 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <algorithm> //test-purposes
 
 template<typename T>
-void print_list(std::list<T> const& my_list) {
+void print_list(std::list<T> const& input) {
   std::cout << "Sorted list: " << std::endl;
   
-  for (auto i : my_list) {
+  for (auto i : input) {
     std::cout << i << " ";    
   }
 
   std::cout << std::endl;
 }
 
-void quicksort(std::list<std::string>& vec) {
-  
+void quicksort(std::list<int>& li) {
+
 }
 
 int main(int argc, char* argv[]) {
-  std::list<std::string> my_list;
+  std::list<int> li;
   
   for (int i=0; i < argc; ++i) {
-    my_list.push_back(argv[i]);
+    li.push_back(std::atoi(argv[i]));
   }
 
-  print_list(my_list);
+  quicksort(li);
+  print_list(li);
   
   return 0;
 }
