@@ -1,6 +1,8 @@
+#include <memory> //std::make_shared
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream> //std::stringstream
 
 template<typename T>
 void print_vector(std::vector<T> const& input) {
@@ -13,20 +15,35 @@ void print_vector(std::vector<T> const& input) {
   std::cout << std::endl;
 }
 
-/*template<typename T>
-void swap(T& lhs, T& rhs) {
-  T temp = lhs;
-  lhs = rhs;
-  rhs = temp;
-}*/
-
-void swap(std::vector<int>& v, int lhs, int rhs) {
-  int temp = v[lhs];
+template<typename T>
+void swap(std::vector<T>& v, int lhs, int rhs) {
+  T temp = v[lhs];
   v[lhs] = v[rhs];
   v[rhs] = temp;
 }
 
-bool quicksort(std::vector<int>& vec, int start, int end) {
+bool is_double(std::string str) {
+  double num;
+  std::stringstream ss(str);
+  ss >> num;
+  if (ss.fail()) {
+    return false; 
+  }
+  return true;
+}
+
+bool is_int(std::string str) {
+  int num;
+  std::stringstream ss(str);
+  ss >> num;
+  if (ss.fail()) {
+    return false;
+  }
+  return true;
+}
+
+template<typename T>
+bool quicksort(std::vector<T>& vec, int start, int end) {
   int length = end-start+1;
 
   if (length <= 1) return true;
@@ -41,7 +58,7 @@ bool quicksort(std::vector<int>& vec, int start, int end) {
     return true;
   }
 
-  int pivot = vec[start];
+  T pivot = vec[start];
   unsigned left = start + 1;
   unsigned right = end;
 
@@ -59,7 +76,6 @@ bool quicksort(std::vector<int>& vec, int start, int end) {
       ++left;
       --right;
     }
-
   }
 
   swap(vec, start, right);
@@ -71,15 +87,34 @@ bool quicksort(std::vector<int>& vec, int start, int end) {
 
 
 int main(int argc, char* argv[]) {
-  std::vector<int> v;
 
-  for (int i=1; i < argc; ++i) {
-    v.push_back(std::stoi(argv[i]));
+  //use first element to determine type of command line arguments
+  if (is_int(argv[1])) {    
+    auto v = std::make_shared<std::vector<int>>();
+    //start from i=1, because i=0 is the name of the program 
+    for (int i=1; i < argc; ++i) {
+      v->push_back(std::stoi(argv[i]));
+    }
+    print_vector(*v);
+    quicksort(*v, 0, v->size()-1);
+    print_vector(*v);
+  } else if (is_double(argv[1])) {
+    auto v = std::make_shared<std::vector<double>>();
+    for (int i=1; i < argc; ++i) {
+      v->push_back(std::stod(argv[i]));
+    }
+    print_vector(*v);
+    quicksort(*v, 0, v->size()-1);
+    print_vector(*v);
+  } else {
+    auto v = std::make_shared<std::vector<std::string>>();
+    for (int i=1; i < argc; ++i) {
+      v->push_back(argv[i]);
+    }
+    print_vector(*v);
+    quicksort(*v, 0, v->size()-1);
+    print_vector(*v);
   }
 
-  print_vector(v);
-  quicksort(v, 0, v.size()-1);
-  print_vector(v);
-  
   return 0;
 }
