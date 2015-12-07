@@ -2,14 +2,13 @@
 #include <vector>
 #include <string>
 #include <sstream> //std::stringstream
-#include <algorithm>
 
 template<typename T>
 void print_vector(std::vector<T> const& input) {
   std::cout << "Sorted vector: " << std::endl;
-  
+
   for (auto i : input) {
-    std::cout << i << " ";    
+    std::cout << i << " ";
   }
 
   std::cout << std::endl;
@@ -27,7 +26,7 @@ bool is_double(std::string str) {
   std::stringstream ss(str);
   ss >> num;
   if (ss.fail()) {
-    return false; 
+    return false;
   }
   return true;
 }
@@ -44,13 +43,7 @@ bool is_int(std::string str) {
 
 template<typename T>
 bool quicksort(std::vector<T>& vec, int start, int end) {
-  // int length = (end-start)+1;
-
   if (end == start) return true;
-  // if (length == 2) {
-  //   if (vec[start] > vec[end]) swap(vec, start, end);
-  //   return true;
-  // }
 
   int left = start;
   int right = end;
@@ -58,11 +51,11 @@ bool quicksort(std::vector<T>& vec, int start, int end) {
 
   while (left < right) {
     while (vec[left] <= pivot) {
-      ++left;
+      left++;
     }
 
     while (vec[right] > pivot) {
-      --right;
+      right--;
     }
 
     if (left <= right) {
@@ -83,25 +76,25 @@ int main(int argc, char* argv[]) {
   std::vector<int> vec_i;
   std::vector<char> vec_c;
 
-  if (is_double(argv[1])) {
-    for (int i=1; i < argc; ++i) {
-      vec_d.push_back(std::stod(argv[i]));
-    }
-    quicksort(vec_d, 0, vec_d.size()-1);
-    print_vector(vec_d);
-  } else if (is_int(argv[1])) {
+  //use argv[1] to determine type of arguments
+  if (is_int(argv[1])) {
     for (int i=1; i < argc; ++i) {
       vec_i.push_back(std::stoi(argv[i]));
     }
     quicksort(vec_i, 0, vec_i.size()-1);
     print_vector(vec_i);
+  } else if (is_double(argv[1])) {
+    for (int i=1; i < argc; ++i) {
+      vec_d.push_back(std::stod(argv[i]));
+    }
+    quicksort(vec_d, 0, vec_d.size()-1);
+    print_vector(vec_d);
   } else {
     for (int i=1; i < argc; ++i) {
       for (int j=0; argv[i][j] != '\0'; ++j) {
         vec_c.push_back(argv[i][j]);
       }
     }
-    print_vector(vec_c);
     quicksort(vec_c, 0, vec_c.size()-1);
     print_vector(vec_c);
   }
