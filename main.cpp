@@ -1,3 +1,12 @@
+// Name: Jakob Herpel
+// Matrikelnummer: 115115
+// Uses first command line argument to determine type of input (double, int, characters),
+// sorts with quicksort and returns the sorted list.
+
+// ! Does not work on all inputs !
+// I have seen wrongly sorted lists and Segmentation Faults, but I couldn't find the problem. :(
+
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -23,16 +32,6 @@ void swap(std::vector<T>& v, int lhs, int rhs) {
 
 bool is_double(std::string str) {
   double num;
-  std::stringstream ss(str);
-  ss >> num;
-  if (ss.fail()) {
-    return false;
-  }
-  return true;
-}
-
-bool is_int(std::string str) {
-  int num;
   std::stringstream ss(str);
   ss >> num;
   if (ss.fail()) {
@@ -77,13 +76,7 @@ int main(int argc, char* argv[]) {
   std::vector<char> vec_c;
 
   //use argv[1] to determine type of arguments
-  if (is_int(argv[1])) {
-    for (int i=1; i < argc; ++i) {
-      vec_i.push_back(std::stoi(argv[i]));
-    }
-    quicksort(vec_i, 0, vec_i.size()-1);
-    print_vector(vec_i);
-  } else if (is_double(argv[1])) {
+  if (is_double(argv[1])) {
     for (int i=1; i < argc; ++i) {
       vec_d.push_back(std::stod(argv[i]));
     }
