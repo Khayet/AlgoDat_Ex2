@@ -1,8 +1,8 @@
-#include <memory> //std::make_shared
 #include <iostream>
 #include <vector>
 #include <string>
 #include <sstream> //std::stringstream
+#include <algorithm>
 
 template<typename T>
 void print_vector(std::vector<T> const& input) {
@@ -44,76 +44,66 @@ bool is_int(std::string str) {
 
 template<typename T>
 bool quicksort(std::vector<T>& vec, int start, int end) {
-  int length = end-start+1;
+  // int length = (end-start)+1;
 
-  if (length <= 1) return true;
-  if (length == 2) {
-    if (vec[start] > vec[end]) swap(vec, start, end);
-    return true;
-  }
-  if (length == 3) {
-    if (vec[start] > vec[start+1]) swap(vec, start, start+1);
-    if (vec[start+1] > vec[end]) swap(vec, start+1, end);
-    if (vec[start] > vec[start+1]) swap(vec, start, start+1);
-    return true;
-  }
+  if (end == start) return true;
+  // if (length == 2) {
+  //   if (vec[start] > vec[end]) swap(vec, start, end);
+  //   return true;
+  // }
 
-  T pivot = vec[start];
-  unsigned left = start + 1;
-  unsigned right = end;
+  int left = start;
+  int right = end;
+  T pivot = vec[(start+end)/2];
 
   while (left < right) {
-    while (vec[left] < pivot) {
+    while (vec[left] <= pivot) {
       ++left;
     }
 
-    while (vec[right] >= pivot) {
+    while (vec[right] > pivot) {
       --right;
     }
 
-    if (left < right) { 
+    if (left <= right) {
       swap(vec, left, right);
       ++left;
       --right;
     }
   }
 
-  swap(vec, start, right);
-  quicksort(vec, start, right-1);
-  quicksort(vec, right, end);
+  if (start < right) quicksort(vec, start, right);
+  if (left < end) quicksort(vec, left, end);
 
   return true;
 }
 
-
 int main(int argc, char* argv[]) {
+  std::vector<double> vec_d;
+  std::vector<int> vec_i;
+  std::vector<char> vec_c;
 
-  //use first element to determine type of command line arguments
-  if (is_int(argv[1])) {    
-    auto v = std::make_shared<std::vector<int>>();
-    //start from i=1, because i=0 is the name of the program 
+  if (is_double(argv[1])) {
     for (int i=1; i < argc; ++i) {
-      v->push_back(std::stoi(argv[i]));
+      vec_d.push_back(std::stod(argv[i]));
     }
-    print_vector(*v);
-    quicksort(*v, 0, v->size()-1);
-    print_vector(*v);
-  } else if (is_double(argv[1])) {
-    auto v = std::make_shared<std::vector<double>>();
+    quicksort(vec_d, 0, vec_d.size()-1);
+    print_vector(vec_d);
+  } else if (is_int(argv[1])) {
     for (int i=1; i < argc; ++i) {
-      v->push_back(std::stod(argv[i]));
+      vec_i.push_back(std::stoi(argv[i]));
     }
-    print_vector(*v);
-    quicksort(*v, 0, v->size()-1);
-    print_vector(*v);
+    quicksort(vec_i, 0, vec_i.size()-1);
+    print_vector(vec_i);
   } else {
-    auto v = std::make_shared<std::vector<std::string>>();
     for (int i=1; i < argc; ++i) {
-      v->push_back(argv[i]);
+      for (int j=0; argv[i][j] != '\0'; ++j) {
+        vec_c.push_back(argv[i][j]);
+      }
     }
-    print_vector(*v);
-    quicksort(*v, 0, v->size()-1);
-    print_vector(*v);
+    print_vector(vec_c);
+    quicksort(vec_c, 0, vec_c.size()-1);
+    print_vector(vec_c);
   }
 
   return 0;
