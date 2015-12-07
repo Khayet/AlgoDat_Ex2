@@ -1,5 +1,3 @@
-// Name: Jakob Herpel
-// Matrikelnummer: 115115
 // Uses first command line argument to determine type of input (double, int, characters),
 // sorts with quicksort and returns the sorted list.
 
